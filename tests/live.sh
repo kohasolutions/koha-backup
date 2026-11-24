@@ -54,6 +54,7 @@ KOHA_VERSION=$(lk "cd /kohadevbox/koha && PERL5LIB=/kohadevbox/koha perl -MKoha 
 RELEASE=$(cut -d. -f1-3 <<<"$KOHA_VERSION")
 DB_SCHEMA=$(lk "mysql --defaults-extra-file=<(printf '[client]\nhost=%s\nuser=%s\npassword=\"%s\"\n' \$(xmlstarlet sel -t -v 'yazgfs/config/hostname' -o ' ' -v 'yazgfs/config/user' -o ' ' -v 'yazgfs/config/pass' /etc/koha/sites/$INSTANCE/koha-conf.xml)) -N -e \"SELECT value FROM systempreferences WHERE variable='Version'\" koha_$INSTANCE")
 DB_SERVER=$(lk "mysql --defaults-extra-file=<(printf '[client]\nhost=%s\nuser=%s\npassword=\"%s\"\n' \$(xmlstarlet sel -t -v 'yazgfs/config/hostname' -o ' ' -v 'yazgfs/config/user' -o ' ' -v 'yazgfs/config/pass' /etc/koha/sites/$INSTANCE/koha-conf.xml)) -N -e 'SELECT VERSION()'")
+# shellcheck disable=SC2016  # $PRETTY_NAME expands inside the Koha container, not here
 OS=$(lk '. /etc/os-release; echo "$PRETTY_NAME"')
 STARTED=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 echo "koha-backup $(bash koha-backup.sh version | cut -d' ' -f2)"
